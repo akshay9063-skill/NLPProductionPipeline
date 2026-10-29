@@ -20,6 +20,8 @@ MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 SEMANTIC_WEIGHT = 0.75
 KEYWORD_WEIGHT = 0.25
+LOGIN_RELEVANCE_BOOST = 0.15
+
 
 STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "can",
@@ -109,7 +111,7 @@ def _get_query_vector(
     question: str,
     dimension: int,
 ) -> np.ndarray:
-    """Encode a question using the current model constructor."""
+    """Encode a question and validate the resulting vector."""
     query_vector = np.asarray(
         _get_model().encode(
             [question],
@@ -149,6 +151,28 @@ def _get_query_vector(
     return np.ascontiguousarray(query_vector)
 
 
+def _is_login_question(question: str) -> bool:
+    """Identify common ways users ask about signing in."""
+    return bool(
+        re.search(
+            r"\b(login|log\s+in|sign\s+in|sign-in|signin)\b",
+            question,
+            re.IGNORECASE,
+        )
+    )
+
+
+def _is_login_troubleshooting_chunk(text: str) -> bool:
+    """Identify chunks specifically about login failures."""
+    return bool(
+        re.search(
+            r"\blogin failures\b",
+            text,
+            re.IGNORECASE,
+        )
+    )
+
+
 def search_documents(
     question: str,
     top_k: int = 3,
@@ -168,7 +192,7 @@ def search_documents(
 
     all_records, _ = load_embeddings()
 
-    # Apply access restrictions before ranking documents.
+    # Enforce access restrictions before ranking documents.
     records = [
         record
         for record in all_records
@@ -204,6 +228,8 @@ def search_documents(
     )
 
     question_tokens = _tokens(question)
+    login_question = _is_login_question(question)
+
     results = []
 
     for semantic_score, position in zip(
@@ -225,6 +251,14 @@ def search_documents(
             SEMANTIC_WEIGHT * semantic_score
             + KEYWORD_WEIGHT * keyword_score
         )
+
+        # Give the login troubleshooting section a modest boost for
+        # questions explicitly asking about signing in.
+        if (
+            login_question
+            and _is_login_troubleshooting_chunk(record["text"])
+        ):
+            combined_score += LOGIN_RELEVANCE_BOOST
 
         results.append(
             {

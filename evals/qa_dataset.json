@@ -1,8 +1,18 @@
-﻿[
+[
   {
     "question": "How do I reset my password?",
     "expected_document_id": "DOC001",
     "expected_keywords": ["Forgot Password", "30 minutes"]
+  },
+  {
+    "question": "What happens when I use Forgot Password?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["reset link", "registered email"]
+  },
+  {
+    "question": "How long does a password reset link remain valid?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["30 minutes", "password reset"]
   },
   {
     "question": "How do I create an account?",
@@ -10,9 +20,29 @@
     "expected_keywords": ["registration page", "verification email"]
   },
   {
+    "question": "What do I need to enter when registering?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["email address", "password"]
+  },
+  {
+    "question": "Why must I verify my email when creating an account?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["verification email", "activating the account"]
+  },
+  {
     "question": "What should I do if login fails?",
     "expected_document_id": "DOC002",
     "expected_keywords": ["email address", "password", "verified"]
+  },
+  {
+    "question": "What should I check if my account login is unsuccessful?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["email address", "password", "verified"]
+  },
+  {
+    "question": "What can I do if I cannot sign in?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["password reset", "verified"]
   },
   {
     "question": "What should I check if file upload fails?",
@@ -20,8 +50,28 @@
     "expected_keywords": ["file type", "file size"]
   },
   {
+    "question": "Why is my file not uploading?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["file type", "file size", "contact support"]
+  },
+  {
+    "question": "What should I do if an upload error continues?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["Retry the upload", "contact support"]
+  },
+  {
     "question": "How do I report slow application performance?",
     "expected_document_id": "DOC002",
     "expected_keywords": ["network connection", "contact support"]
+  },
+  {
+    "question": "What should I try when the application responds slowly?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["network connection", "try again"]
+  },
+  {
+    "question": "What information should I provide when reporting slow performance?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["approximate time", "steps"]
   }
 ]
