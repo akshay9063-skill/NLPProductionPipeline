@@ -28,6 +28,6 @@ jobs:
 
       - name: Run tests
         env:
-          PUBLIC_API_KEY: ci-public-key
-          STAFF_API_KEY: ci-staff-key
+          PUBLIC_API_KEY: local-public-key-change-this
+          STAFF_API_KEY: local-staff-key-change-this
         run: python -m pytest -q
