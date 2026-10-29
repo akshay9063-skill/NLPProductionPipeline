@@ -1,0 +1,27 @@
+﻿[
+  {
+    "question": "How do I reset my password?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["Forgot Password", "30 minutes"]
+  },
+  {
+    "question": "How do I create an account?",
+    "expected_document_id": "DOC001",
+    "expected_keywords": ["registration page", "verification email"]
+  },
+  {
+    "question": "What should I do if login fails?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["email address", "password", "verified"]
+  },
+  {
+    "question": "What should I check if file upload fails?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["file type", "file size"]
+  },
+  {
+    "question": "How do I report slow application performance?",
+    "expected_document_id": "DOC002",
+    "expected_keywords": ["network connection", "contact support"]
+  }
+]
