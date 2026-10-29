@@ -1,5 +1,4 @@
-
-import logging
+﻿import logging
 import time
 
 from fastapi import Depends, FastAPI, Request
@@ -13,6 +12,7 @@ from backend.schemas import (
 from backend.qa import answer_question
 from backend.triage import triage_ticket
 from backend.security import get_current_role
+from monitoring.metrics import record_request, get_metrics
 
 
 logging.basicConfig(
@@ -28,14 +28,14 @@ app = FastAPI(
     version="0.1.0",
     description=(
         "Documentation question answering and "
-        "support ticket triage API."
+        "support ticket triage API with monitoring."
     ),
 )
 
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    """Log request metadata without recording secrets or request bodies."""
+    """Log request metadata and record operational metrics."""
     start_time = time.perf_counter()
     status_code = 500
 
@@ -54,6 +54,13 @@ async def log_requests(request: Request, call_next):
     finally:
         duration_ms = (time.perf_counter() - start_time) * 1000
 
+        record_request(
+            request.method,
+            request.url.path,
+            status_code,
+            duration_ms,
+        )
+
         logger.info(
             "HTTP method=%s path=%s status=%s duration_ms=%.2f",
             request.method,
@@ -71,6 +78,12 @@ def health():
         "service": "NLP Production Pipeline",
         "version": "0.1.0",
     }
+
+
+@app.get("/metrics")
+def metrics(role: str = Depends(get_current_role)):
+    """Return operational metrics to authenticated callers."""
+    return get_metrics()
 
 
 @app.post("/qa", response_model=QAResponse)
